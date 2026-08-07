@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actualbudget
+  namespace: actualbudget
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actualbudget
+  template:
+    metadata:
+      labels:
+        app: actualbudget
+    spec:
+      containers:
+        - name: actualbudget
+          image: actualbudget/actual-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5006
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: actualbudget-data
