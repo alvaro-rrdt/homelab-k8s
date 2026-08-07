@@ -1,0 +1,7 @@
+# vim
+*.swp
+*.swo
+*~
+
+# OS junk
+.DS_Store
