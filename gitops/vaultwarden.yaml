@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vaultwarden
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: http://forgejo.forgejo.svc.cluster.local:3000/Alvaro.rm.rdt/homelab-k8s.git
+    targetRevision: main
+    path: vaultwarden
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vaultwarden
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false
