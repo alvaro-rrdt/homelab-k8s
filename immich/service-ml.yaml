@@ -1,0 +1,9 @@
+# service-ml.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-ml
+  namespace: immich
+spec:
+  selector: { app: immich-ml }
+  ports: [{ port: 3003, targetPort: 3003 }]

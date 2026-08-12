@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      containers:
+        - name: immich-server
+          image: ghcr.io/immich-app/immich-server:v3.1.0
+          env:
+            - name: DB_HOSTNAME
+              value: immich-postgres
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-db-secret
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-db-secret
+                  key: db-password
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-db-secret
+                  key: db-name
+            - name: REDIS_HOSTNAME
+              value: immich-redis
+            - name: MACHINE_LEARNING_HOST
+              value: immich-ml
+            - name: MACHINE_LEARNING_PORT
+              value: "3003"
+            - name: UPLOAD_LOCATION
+              value: /usr/src/app/upload
+          ports:
+            - containerPort: 2283
+          volumeMounts:
+            - name: smb
+              mountPath: /usr/src/app/upload
+      volumes:
+        - name: smb
+          persistentVolumeClaim:
+            claimName: immich-smb-pvc

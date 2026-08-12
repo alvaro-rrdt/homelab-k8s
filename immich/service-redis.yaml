@@ -1,0 +1,9 @@
+# service-redis.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-redis
+  namespace: immich
+spec:
+  selector: { app: immich-redis }
+  ports: [{ port: 6379, targetPort: 6379 }]
