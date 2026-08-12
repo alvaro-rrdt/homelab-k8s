@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: tensorchord/pgvecto-rs:pg14
+          image: pgvector/pgvecto-rs:pg14
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
