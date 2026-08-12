@@ -18,7 +18,13 @@ spec:
             - name: WEBSOCKET_ENABLED
               value: "true"
             - name: SIGNUPS_ALLOWED
+              value: "false"
+            - name: BACKUP_ENABLED
               value: "true"
+            - name: BACKUP_INTERVAL_SECONDS
+              value: "86400"
+            - name: BACKUP_RETENTION_DAYS
+              value: "30"
             - name: ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
