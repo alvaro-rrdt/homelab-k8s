@@ -19,8 +19,8 @@ spec:
               command: ["/bin/sh", "-ec"]
               args:
                 - |
-                  mkdir -p /vault /box
-                  cp -a /vault/backups/. /box/
+                  mkdir -p /box
+                  cp -a /vault/. /box/
                   echo "Copied $(ls /box | wc -l) items"
               volumeMounts:
                 - { name: vault, mountPath: /vault }
