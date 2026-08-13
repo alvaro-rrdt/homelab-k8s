@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vaultwarden-smb-pv
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - vers=3.0
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: vaultwarden-smb-pv
+    volumeAttributes:
+      source: "//u648454.your-storagebox.de/backup/backups/vaultwarden"
+    nodeStageSecretRef:
+      name: immich-smb-creds
+      namespace: immich

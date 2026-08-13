@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vaultwarden-backup
+  namespace: vaultwarden
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: copy-backup
+              image: alpine:3.20
+              command: ["/bin/sh", "-ec"]
+              args:
+                - |
+                  mkdir -p /vault /box
+                  cp -a /vault/backups/. /box/
+                  echo "Copied $(ls /box | wc -l) items"
+              volumeMounts:
+                - { name: vault, mountPath: /vault }
+                - { name: box, mountPath: /box }
+          containers:
+            - name: done
+              image: alpine:3.20
+              command: ["/bin/true"]
+          volumes:
+            - name: vault
+              persistentVolumeClaim: { claimName: vaultwarden-data }
+            - name: box
+              persistentVolumeClaim: { claimName: vaultwarden-smb-pvc }
