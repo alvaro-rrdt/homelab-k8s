@@ -15,9 +15,11 @@ spec:
           admissionWebhooks:
             enabled: false
         grafana:
-          adminPassword: Alvaro.rm.rdt;!<>8403
           service:
             type: ClusterIP
+          admin:
+            existingSecret: grafana-admin
+            passwordKey: admin-password
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
