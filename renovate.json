@@ -3,6 +3,8 @@
   "extends": ["config:recommended"],
   "dependencyDashboard": true,
   "labels": ["renovate"],
+  "gitUrl": "endpoint",
+  "endpoint": "http://forgejo.forgejo.svc.cluster.local:3000/api/v1/",
   "packageRules": [
     {
       "matchDatasources": ["docker"],
