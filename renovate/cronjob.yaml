@@ -26,6 +26,11 @@ spec:
                     secretKeyRef:
                       name: renovate-secrets
                       key: token
+                - name: RENOVATE_GITHUB_COM_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: renovate-secret
+                      key: github-token
                 - name: RENOVATE_REPOSITORIES
                   value: "Alvaro.rm.rdt/homelab-k8s"
                 - name: RENOVATE_AUTODISCOVER
