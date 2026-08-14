@@ -32,3 +32,11 @@ spec:
                   value: "false"
                 - name: RENOVATE_GIT_URLS
                   value: '{"Alvaro.rm.rdt/homelab-k8s":"http://forgejo.forgejo.svc.cluster.local:3000/Alvaro.rm.rdt/homelab-k8s.git"}'
+                - name: GIT_AUTHOR_NAME
+                  value: "Renovate Bot"
+                - name: GIT_AUTHOR_EMAIL
+                  value: "renovate@homelab.local"
+                - name: GIT_COMMITTER_NAME
+                  value: "Renovate Bot"
+                - name: GIT_COMMITTER_EMAIL
+                  value: "renovate@homelab.local"
