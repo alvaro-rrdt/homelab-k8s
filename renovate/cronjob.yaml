@@ -30,3 +30,5 @@ spec:
                   value: "Alvaro.rm.rdt/homelab-k8s"
                 - name: RENOVATE_AUTODISCOVER
                   value: "false"
+                - name: RENOVATE_GIT_URLS
+                  value: '{"Alvaro.rm.rdt/homelab-k8s":"http://forgejo.forgejo.svc.cluster.local:3000/Alvaro.rm.rdt/homelab-k8s.git"}'
