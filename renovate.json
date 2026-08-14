@@ -6,13 +6,23 @@
   "kubernetes": {
     "fileMatch": ["\\.yaml$"]
   },
-  "gitUrl": "endpoint",
-  "endpoint": "http://forgejo.forgejo.svc.cluster.local:3000/api/v1/",
   "packageRules": [
     {
       "matchDatasources": ["docker"],
-      "groupName": "docker images",
-      "separateMajorMinor": true
+      "matchPackageNames": ["*postgres*", "*redis*", "*mariadb*", "*mysql*"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["*postgres*", "*redis*", "*mariadb*", "*mysql*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "labels": ["stateful-db-update"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["major-update"]
     }
   ]
 }
