@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: act-runner
+  namespace: act-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: act-runner
+  template:
+    metadata:
+      labels:
+        app: act-runner
+    spec:
+      containers:
+        - name: act-runner
+          image: code.forgejo.org/forgejo/runner:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              forgejo-runner register --no-interactive \
+                --instance http://forgejo.forgejo.svc.cluster.local:3000 \
+                --token $RUNNER_TOKEN \
+                --name k8s-runner \
+                --labels ubuntu-latest:docker://node:20-bullseye
+              forgejo-runner daemon
+          env:
+            - name: RUNNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: act-runner-secrets
+                  key: token
+          volumeMounts:
+            - name: runner-data
+              mountPath: /data
+      volumes:
+        - name: runner-data
+          persistentVolumeClaim:
+            claimName: act-runner-data
