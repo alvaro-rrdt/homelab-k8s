@@ -15,16 +15,16 @@ spec:
     spec:
       containers:
         - name: act-runner
-          image: code.forgejo.org/forgejo/runner:latest
+          image: gitea/act_runner:latest
           command: ["/bin/sh", "-c"]
           args:
             - |
-              forgejo-runner register --no-interactive \
+              act_runner register --no-interactive \
                 --instance http://forgejo.forgejo.svc.cluster.local:3000 \
                 --token $RUNNER_TOKEN \
                 --name k8s-runner \
                 --labels ubuntu-latest:docker://node:20-bullseye
-              forgejo-runner daemon
+              act_runner daemon
           env:
             - name: RUNNER_TOKEN
               valueFrom:
