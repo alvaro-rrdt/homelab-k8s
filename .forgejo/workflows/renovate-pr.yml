@@ -1,0 +1,33 @@
+name: AI PR Summary
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get PR diff
+        id: diff
+        run: |
+          curl -s -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
+            "${{ github.event.pull_request.diff_url }}" > /tmp/pr.diff
+          echo "diff_size=$(wc -c < /tmp/pr.diff)" >> $GITHUB_OUTPUT
+      - name: Call DeepSeek
+        id: ai
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          DIFF=$(cat /tmp/pr.diff | head -c 6000)
+          RESP=$(curl -s https://api.deepseek.com/chat/completions \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $DEEPSEEK_API_KEY" \
+            -d "{\"model\":\"deepseek-v4-flash\",\"thinking\":{\"type\":\"disabled\"},\"messages\":[{\"role\":\"user\",\"content\":\"Summarize this dependency update PR in 3-4 sentences for a homelab owner: what changed, risk level, anything to watch. PR title: ${{ github.event.pull_request.title }}\n\nDiff:\n$DIFF\"}],\"max_tokens\":300}")
+          echo "$RESP" | jq -r '.choices[0].message.content' > /tmp/summary.md
+      - name: Post comment
+        run: |
+          curl -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\":\"🤖 **AI PR Summary**\n\n$(cat /tmp/summary.md)\"}" \
+            "${{ github.event.pull_request.comments_url }}"
