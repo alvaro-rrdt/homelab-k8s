@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: act-runner-config
+  namespace: act-runner
+data:
+  config.yaml: |
+    server:
+      connections:
+        forgejo:
+          url: http://forgejo.forgejo.svc.cluster.local:3000/
+          uuid: 973cd433-c5c5-4cf8-9d37-f8cb04166310
+          token: 675d78e0e338af5b30cfc6b8433fd6dbdec40efa

@@ -15,26 +15,21 @@ spec:
     spec:
       containers:
         - name: act-runner
-          image: gitea/act_runner:latest
+          image: code.forgejo.org/forgejo/runner:13
           command: ["/bin/sh", "-c"]
           args:
             - |
-              act_runner register --no-interactive \
-                --instance http://forgejo.forgejo.svc.cluster.local:3000 \
-                --token $RUNNER_TOKEN \
-                --name k8s-runner \
-                --labels ubuntu-latest:docker://node:20-bullseye
-              act_runner daemon
-          env:
-            - name: RUNNER_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: act-runner-secrets
-                  key: token
+              forgejo-runner daemon --config /data/config.yaml
           volumeMounts:
             - name: runner-data
               mountPath: /data
+            - name: config
+              mountPath: /data/config.yaml
+              subPath: config.yaml
       volumes:
         - name: runner-data
           persistentVolumeClaim:
             claimName: act-runner-data
+        - name: config
+          configMap:
+            name: act-runner-config
