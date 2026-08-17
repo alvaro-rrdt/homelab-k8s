@@ -8,13 +8,15 @@ jobs:
     steps:
       - name: Fix DNS for Forgejo
         run: echo "10.43.120.174 forgejo.forgejo.svc.cluster.local" >> /etc/hosts
-      - name: Get PR info + diff
+
+      - name: Get PR diff
         id: diff
         run: |
           curl -s -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
             "${{ github.event.pull_request.diff_url }}" > /tmp/pr.diff
           echo "diff_size=$(wc -c < /tmp/pr.diff)" >> $GITHUB_OUTPUT
           echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+
       - name: Call DeepSeek
         id: ai
         env:
@@ -28,11 +30,15 @@ jobs:
             -d "{\"model\":\"deepseek-v4-flash\",\"thinking\":{\"type\":\"disabled\"},\"messages\":[{\"role\":\"user\",\"content\":\"Summarize this dependency update PR in 3-4 sentences for a homelab owner: what changed, risk level, anything to watch. PR title: $PR_TITLE\n\nDiff:\n$DIFF\"}],\"max_tokens\":300}")
           echo "$RESP" | jq -r '.choices[0].message.content' > /tmp/summary.md
           cat /tmp/summary.md
+
       - name: Post comment
         run: |
-          SUMMARY=$(cat /tmp/summary.md)
-          jq -n --arg body "🤖 **AI PR Summary**\n\n$SUMMARY" '{body: $body}' > /tmp/comment.json
+          python3 -c "
+          import json
+          body = '🤖 **AI PR Summary**\n\n' + open('/tmp/summary.md').read()
+          print(json.dumps({'body': body}))
+          " > /tmp/comment.json
           curl -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d @/tmp/comment.json \
-            "${{ github.event.pull_request.comments_url }}"
+            "http://forgejo.forgejo.svc.cluster.local:3000/api/v1/repos/Alvaro.rm.rdt/homelab-k8s/issues/${{ github.event.pull_request.number }}/comments"
