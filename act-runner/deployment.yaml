@@ -20,6 +20,8 @@ spec:
           args:
             - |
               forgejo-runner daemon --config /data/config.yaml
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - name: runner-data
               mountPath: /data
