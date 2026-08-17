@@ -26,6 +26,8 @@ spec:
             - name: config
               mountPath: /data/config.yaml
               subPath: config.yaml
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
       volumes:
         - name: runner-data
           persistentVolumeClaim:
@@ -33,3 +35,6 @@ spec:
         - name: config
           configMap:
             name: act-runner-config
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
