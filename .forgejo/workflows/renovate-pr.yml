@@ -38,7 +38,8 @@ jobs:
           body = '🤖 **AI PR Summary**\n\n' + open('/tmp/summary.md').read()
           print(json.dumps({'body': body}))
           " > /tmp/comment.json
-          curl -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
+          curl --fail -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d @/tmp/comment.json \
             "http://forgejo.forgejo.svc.cluster.local:3000/api/v1/repos/Alvaro.rm.rdt/homelab-k8s/issues/${{ github.event.pull_request.number }}/comments"
+          echo "Comment posted (HTTP $?)"
