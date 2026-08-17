@@ -11,3 +11,7 @@ data:
           url: http://forgejo.forgejo.svc.cluster.local:3000/
           uuid: 973cd433-c5c5-4cf8-9d37-f8cb04166310
           token: 675d78e0e338af5b30cfc6b8433fd6dbdec40efa
+    runner:
+      labels:
+        - ubuntu-latest:docker://node:20-bullseye
+        - linux:docker://node:20-bullseye
