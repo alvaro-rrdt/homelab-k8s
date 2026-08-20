@@ -1,0 +1,23 @@
+name: Validate
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fix DNS for Forgejo
+        run: echo "10.43.120.174 forgejo.forgejo.svc.cluster.local" >> /etc/hosts
+
+      - name: Install kubeconform (YAML validation)
+        run: |
+          curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Validate all manifests
+        run: |
+          cd /workspace/Alvaro.rm.rdt/homelab-k8s 2>/dev/null || cd .
+          kubeconform -strict -summary --ignore-missing-schemas \
+            vaultwarden/*.yaml actualbudget/*.yaml immich/*.yaml forgejo/*.yaml \
+            uptime-kuma/*.yaml openwebui/*.yaml renovate/*.yaml act-runner/*.yaml
