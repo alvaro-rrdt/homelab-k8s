@@ -13,11 +13,11 @@ jobs:
       - name: Install kubeconform (YAML validation)
         run: |
           curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
-          sudo mv kubeconform /usr/local/bin/
+          mv kubeconform /usr/local/bin/
 
       - name: Validate all manifests
         run: |
-          cd /workspace/Alvaro.rm.rdt/homelab-k8s 2>/dev/null || cd .
+          cd /workspace/Alvaro.rm.rdt/homelab-k8s
           kubeconform -strict -summary --ignore-missing-schemas \
             vaultwarden/*.yaml actualbudget/*.yaml immich/*.yaml forgejo/*.yaml \
             uptime-kuma/*.yaml openwebui/*.yaml renovate/*.yaml act-runner/*.yaml
