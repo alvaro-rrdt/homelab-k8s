@@ -17,8 +17,11 @@ jobs:
 
       - name: Validate all manifests
         run: |
-          cd $(find / -maxdepth 4 -name "homelab-k8s" -type d 2>/dev/null | head -1)
-          pwd
+          cd /tmp
+          git clone http://forgejo.forgejo.svc.cluster.local:3000/Alvaro.rm.rdt/homelab-k8s.git repo
+          cd repo
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout FETCH_HEAD
           kubeconform -strict -summary --ignore-missing-schemas \
             vaultwarden/*.yaml actualbudget/*.yaml immich/*.yaml forgejo/*.yaml \
             uptime-kuma/*.yaml openwebui/*.yaml renovate/*.yaml act-runner/*.yaml
