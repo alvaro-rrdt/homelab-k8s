@@ -17,7 +17,8 @@ jobs:
 
       - name: Validate all manifests
         run: |
-          cd /workspace/Alvaro.rm.rdt/homelab-k8s
+          cd $(find / -maxdepth 4 -name "homelab-k8s" -type d 2>/dev/null | head -1)
+          pwd
           kubeconform -strict -summary --ignore-missing-schemas \
             vaultwarden/*.yaml actualbudget/*.yaml immich/*.yaml forgejo/*.yaml \
             uptime-kuma/*.yaml openwebui/*.yaml renovate/*.yaml act-runner/*.yaml
