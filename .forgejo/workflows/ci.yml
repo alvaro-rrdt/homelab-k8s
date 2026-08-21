@@ -15,6 +15,11 @@ jobs:
           curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
           mv kubeconform /usr/local/bin/
 
+      - name: Install Trivy (container CVE scanner)
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+
       - name: Validate all manifests
         run: |
           cd /tmp
@@ -25,3 +30,14 @@ jobs:
           kubeconform -strict -summary --ignore-missing-schemas \
             vaultwarden/*.yaml actualbudget/*.yaml immich/*.yaml forgejo/*.yaml \
             uptime-kuma/*.yaml openwebui/*.yaml renovate/*.yaml act-runner/*.yaml
+
+      - name: Scan container images for CVEs
+        run: |
+          cd /tmp/repo
+          grep -rhoE 'image:\s*\S+' --include="*.yaml" . | awk '{print $2}' | sort -u > /tmp/images.txt
+          cat /tmp/images.txt
+          while read img; do
+            [ -z "$img" ] && continue
+            echo "=== Scanning: $img ==="
+            trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 "$img" | tail -15
+          done < /tmp/images.txt
