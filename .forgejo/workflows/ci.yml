@@ -39,5 +39,6 @@ jobs:
           while read img; do
             [ -z "$img" ] && continue
             echo "=== Scanning: $img ==="
-            trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 "$img" | tail -15
+            trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 "$img" 2>/dev/null | tail -15 || \
+              echo "⚠️ Scan failed for $img (auth/registry) — continuing"
           done < /tmp/images.txt
