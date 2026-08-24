@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser
+  namespace: filebrowser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      containers:
+        - name: filebrowser
+          image: filebrowser/filebrowser:latest
+          args: ["-d", "/config/filebrowser.db", "-r", "/srv", "-p", "80"]
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: smb
+              mountPath: /srv
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: smb
+          persistentVolumeClaim: { claimName: filebrowser-smb-pvc }
+        - name: config
+          emptyDir: {}
