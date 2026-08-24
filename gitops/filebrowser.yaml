@@ -14,5 +14,5 @@ spec:
     namespace: filebrowser
   syncPolicy:
     automated:
-      selfHeal: true
+      selfHeal: false
       prune: false
