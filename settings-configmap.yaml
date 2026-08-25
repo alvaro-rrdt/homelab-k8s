@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: searxng-settings
+  namespace: searxng
+data:
+  settings.yml: |
+    use_default_settings: true
+
+    server:
+      secret_key: "fbc9ed385c08c2f0c799a0bcd1aa9f0bf95f4f76b183c444f0f8960dbbdf3"
+      limiter: false
+      public_instance: false
+
+    search:
+      safe_search: 2
+      autocomplete: "google"
+      default_lang: "en"
+      formats:
+        - json
+
+    categories:
+      general:
+        engines:
+          - google
+          - duckduckgo
+          - bing
+          - wikipedia
+          - startpage
+          - mojeek
+      images:
+        engines:
+          - google images
+          - bing images
+
+    engines:
+      - name: google
+        disabled: false
+      - name: duckduckgo
+        disabled: false
+      - name: bing
+        disabled: false
