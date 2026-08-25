@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: searxng
+  namespace: searxng
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: searxng
+  template:
+    metadata:
+      labels:
+        app: searxng
+    spec:
+      containers:
+        - name: searxng
+          image: searxng/searxng:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SEARXNG_BASE_URL
+              value: "http://searxng.searxng.svc.cluster.local:8080/"
+            - name: SEARXNG_SECRET
+              value: "b05db14058aa7ae890f7fb79c6973b2a7edf3fb0a5f9f8268c520cad155da313"
