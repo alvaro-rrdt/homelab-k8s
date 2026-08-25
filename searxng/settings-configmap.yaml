@@ -6,8 +6,31 @@ metadata:
 data:
   settings.yml: |
     use_default_settings: true
+
     server:
       secret_key: "fbc9ed385c08c2f0ce799e0bcd1aa9f0bf954f476b183c4444fc8960dbbdf3c1"
+      limiter: false
+      public_instance: false
+
     search:
+      safe_search: 2
+      autocomplete: "google"
+      default_lang: "en"
       formats:
         - json
+
+    categories:
+      general:
+        engines:
+          - google
+          - duckduckgo
+          - bing
+          - wikipedia
+
+    engines:
+      - name: google
+        disabled: false
+      - name: duckduckgo
+        disabled: false
+      - name: bing
+        disabled: false
