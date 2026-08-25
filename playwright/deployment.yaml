@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playwright
+  namespace: playwright
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: playwright
+  template:
+    metadata:
+      labels:
+        app: playwright
+    spec:
+      containers:
+        - name: playwright
+          image: ghcr.io/browserless/chromium:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CONNECTION_TIMEOUT
+              value: "30000"
+            - name: MAX_CONCURRENT_SESSIONS
+              value: "5"
