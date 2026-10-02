@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: actualbudget
-          image: actualbudget/actual-server:26.9.0
+          image: actualbudget/actual-server:26.10.0
           imagePullPolicy: Always
           ports:
             - containerPort: 5006
