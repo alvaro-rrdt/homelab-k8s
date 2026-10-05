@@ -35,7 +35,7 @@ metadata:
   namespace: actualbudget
 spec:
   schedule: "17 4 * * *"
-  concurrencyPolicy: Forbidden
+  concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
   jobTemplate:
