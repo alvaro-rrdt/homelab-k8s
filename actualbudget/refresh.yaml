@@ -46,7 +46,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: refresh
-              image: bitnami/kubectl:1.31.0
+              image: rancher/kubectl:v1.35.6
               command:
                 - kubectl
                 - delete
