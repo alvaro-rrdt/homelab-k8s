@@ -46,7 +46,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: refresh
-              image: rancher/kubectl:v1.35.6
+              image: rancher/kubectl:v1.36.2
               command:
                 - kubectl
                 - delete
